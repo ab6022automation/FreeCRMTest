@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -13,6 +15,7 @@ import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 
 import com.crm.qa.base.TestBase;
 
@@ -99,4 +102,17 @@ public class TestUtil extends TestBase {
 		Thread.sleep(5000);
 	}
 
+	public static String getScreenshot(WebDriver driver,String screenshotName) throws IOException {
+		
+		String dateName=new SimpleDateFormat("yyyymmddhhmmss").format(new Date());
+		TakesScreenshot thisScreen=(TakesScreenshot)driver;
+		File source=thisScreen.getScreenshotAs(OutputType.FILE);
+		String destination=System.getProperty("user.dir")+"/FailureScreenshot/"+screenshotName+dateName+".png";
+		File finalDestination=new File(destination);
+		FileUtils.copyFile(source,finalDestination);
+		
+		return destination;
+		
+	}
+	
 }

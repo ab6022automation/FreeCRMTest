@@ -12,9 +12,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.events.EventFiringWebDriver;
+import org.testng.ITestResult;
 
 import com.crm.qa.util.TestUtil;
 import com.crm.qa.util.WebEventListener;
+import com.relevantcodes.extentreports.ExtentReports;
+import com.relevantcodes.extentreports.ExtentTest;
+import com.relevantcodes.extentreports.LogStatus;
 
 public class TestBase {
 	
@@ -22,6 +26,8 @@ public class TestBase {
 	public static Properties prop;
 	public  static EventFiringWebDriver e_driver;
 	public static WebEventListener eventListener;
+	public static ExtentReports extent;
+	public static ExtentTest extentLogger;
 	
 	public TestBase(){
 		try {
@@ -66,11 +72,38 @@ public class TestBase {
 	}
 	
 	
+	public static ExtentReports setExtent() {
+		extent=new ExtentReports(System.getProperty("user.dir")+"/test-output/Extent.HTML",true);
+		extent.addSystemInfo("Host Name", "Arindam-PC");
+		return extent;
+	}
+	
+	public static void endReport() {
+		
+		extent.flush();
+		
+	}
 	
 	
 	
+	public static void TestAnalyser(ITestResult result) throws IOException {
+		
+if(result.getStatus()==ITestResult.FAILURE) {
+			
+			//extentLogger.log(LogStatus.FAIL, "Failed TestCase: "+result.getName());
+			String screenshotPath=TestUtil.getScreenshot(driver, result.getName());
+			extentLogger.log(LogStatus.FAIL, extentLogger.addScreenCapture(screenshotPath));
+		}
+		else if(result.getStatus()==ITestResult.SUCCESS) {
+			extentLogger.log(LogStatus.PASS, "Passed TestCase: "+result.getName());
+		}
+		else {
+			extentLogger.log(LogStatus.SKIP, "Skipped TestCase: "+result.getName());
+		}
+		
 	
-	
+		
+	}
 	
 
 }
