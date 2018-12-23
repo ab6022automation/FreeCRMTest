@@ -20,6 +20,9 @@ import com.relevantcodes.extentreports.ExtentReports;
 import com.relevantcodes.extentreports.ExtentTest;
 import com.relevantcodes.extentreports.LogStatus;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+
 public class TestBase {
 	
 	public static WebDriver driver;
@@ -47,11 +50,14 @@ public class TestBase {
 		String browserName = prop.getProperty("browser");
 		
 		if(browserName.equals("chrome")){
-			System.setProperty("webdriver.chrome.driver", "D:\\SOFTWARE\\chromedriver\\chromedriver.exe");	
+			//System.setProperty("webdriver.chrome.driver", "D:\\SOFTWARE\\chromedriver\\chromedriver.exe");	
+			WebDriverManager.chromedriver().setup();
 			driver = new ChromeDriver(); 
 		}
 		else if(browserName.equals("FF")){
-			System.setProperty("webdriver.gecko.driver", "/Users/naveenkhunteta/Documents/SeleniumServer/geckodriver");	
+			//System.setProperty("webdriver.gecko.driver", "/Users/naveenkhunteta/Documents/SeleniumServer/geckodriver");	
+			
+			WebDriverManager.firefoxdriver().setup();
 			driver = new FirefoxDriver(); 
 		}
 		
